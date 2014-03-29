@@ -3,7 +3,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-static volatile unsigned overflowCount = 0;
+static volatile uint32_t overflowCount = 0;
 
 // Timer0 ticks every 64 cycles
 // Overflow happens every 256 ticks
@@ -12,14 +12,15 @@ ISR(TIMER0_OVF_vect)
     ++overflowCount;
 }
 
-// returns milliseconds
-static unsigned long now()
+static uint32_t now_nonstandard()
 {
-    return overflowCount * (unsigned long)(64LL * 256 * 1000 / CLOCK);
+    return overflowCount * 2 / (CLOCK / 8000000);
 }
 
-static void delay(unsigned ms)
+static void delay_nonstandard(unsigned time)
 {
-    unsigned long end = now()+ms;
-    while (now() < end);
+    uint32_t end = now_nonstandard() + time;
+    while (now_nonstandard() < end);
 }
+
+#define delay(ms) delay_nonstandard(ms*1024ULL/1000);
