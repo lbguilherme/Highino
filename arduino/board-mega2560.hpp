@@ -5,8 +5,8 @@
 
 static constexpr long CLOCK = 16000000L;
 
-bool constexpr isValidDigitalPin(uint8_t pin) { return pin < 70; }
-bool constexpr isValidAnalogPin(uint8_t pin) { return pin >= 54 && pin < 70; }
+constexpr bool isValidDigitalPin(uint8_t pin) { return pin < 70; }
+constexpr bool isValidAnalogPin(uint8_t pin) { return pin >= 54 && pin < 70; }
 
 static constexpr uint8_t NUM_DIGITAL_PINS = 70;
 

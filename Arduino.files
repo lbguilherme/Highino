@@ -1,6 +1,9 @@
+arduino/arduino
 arduino/arduino.hpp
 arduino/board-mega2560.hpp
 arduino/led.hpp
 arduino/pin.hpp
+arduino/time.hpp
+arduino/avr.hpp
 main.cpp
 Makefile

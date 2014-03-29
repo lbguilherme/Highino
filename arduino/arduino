@@ -1,4 +1,5 @@
 #pragma once
 #include "arduino.hpp"
+#include "time.hpp"
 #include "pin.hpp"
 #include "led.hpp"
