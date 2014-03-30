@@ -1,5 +1,4 @@
 #pragma once
-
 #include <avr/sfr_defs.h>
 #include <avr/io.h>
 
