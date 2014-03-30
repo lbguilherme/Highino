@@ -8,8 +8,10 @@ public:
 
     Led() {Pin<P>::setMode(Output);}
 
-    void on() {Pin<P>::high();}
-    void off() {Pin<P>::low();}
+    void on()          {Pin<P>::high();}
+    void off()         {Pin<P>::low();}
+    bool isOn() const  {return Pin<P>::isHigh();}
+    bool isOff() const {return Pin<P>::isLow();}
 
 };
 
