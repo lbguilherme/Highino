@@ -16,6 +16,16 @@ enum // Digital Pins
     SDA = 20,
     SCL = 21,
 
+    // Serial
+    TX0 = 0,
+    RX0 = 1,
+    TX1 = 18,
+    RX1 = 19,
+    TX2 = 16,
+    RX2 = 17,
+    TX3 = 14,
+    RX3 = 15,
+
     // Onboard LED
     LED_BUILTIN = 13
 };
