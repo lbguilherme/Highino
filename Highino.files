@@ -7,4 +7,5 @@ arduino/time.hpp
 arduino/avr.hpp
 main.cpp
 Makefile
-arduino/SPI.hpp
+arduino/spi.hpp
+arduino/board-generic.hpp

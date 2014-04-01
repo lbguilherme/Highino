@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include "board-generic.hpp"
 
 enum PinMode { Input, Output, InputPullup };
 
@@ -12,7 +13,7 @@ public:
 
     static constexpr uint8_t pin = P;
 
-    Pin(PinMode mode=Output) {setMode(mode);}
+    Pin(PinMode mode=Output) { disablePwm(); setMode(mode);}
 
     void setMode(PinMode mode);
     PinMode mode() const
@@ -22,12 +23,15 @@ public:
         return Output;
     }
 
-    void high()          {disablePwm(); outputByte |= bit;}
-    void low()           {disablePwm(); outputByte &= ~bit;}
-    void set(bool value) {if (value) high(); else low();}
-    bool isHigh() const  {return outputByte & bit;}
-    bool isLow() const   {return !isHigh();}
-    bool get() const     {return isHigh();}
+    void high()          { outputByte |= bit; }
+    void low()           { outputByte &= ~bit; }
+    void set(bool value) { if (value) high(); else low(); }
+    bool isHigh() const  { return modeByte & bit ? inputByte & bit : outputByte & bit; }
+    bool isLow() const   { return !isHigh(); }
+    bool get() const     { return isHigh(); }
+
+    Pin<P>& operator=(bool value) { set(value); return *this; }
+    bool operator*() { return get(); }
 
 protected:
 
@@ -37,6 +41,7 @@ protected:
     static constexpr uint8_t port = detail::PinToPort[P];
     static constexpr uint8_t timer = detail::PinToTimer[P];
     static constexpr volatile uint8_t& modeByte = *detail::PortToMode[port];
+    static constexpr volatile uint8_t& inputByte = *detail::PortToInput[port];
     static constexpr volatile uint8_t& outputByte = *detail::PortToOutput[port];
 
 };

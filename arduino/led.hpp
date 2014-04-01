@@ -10,10 +10,15 @@ public:
 
     Led() {Pin<P>::setMode(Output);}
 
-    void on()          {Pin<P>::high();}
-    void off()         {Pin<P>::low();}
-    bool isOn() const  {return Pin<P>::isHigh();}
-    bool isOff() const {return Pin<P>::isLow();}
+    void on()            {Pin<P>::high();}
+    void off()           {Pin<P>::low();}
+    void set(bool value) {Pin<P>::set(value);}
+    bool isOn() const    {return Pin<P>::isHigh();}
+    bool isOff() const   {return Pin<P>::isLow();}
+    bool get() const     {return Pin<P>::get();}
+
+    Led<P>& operator=(bool value) { set(value); return *this; }
+    bool operator*() { return get(); }
 
 };
 

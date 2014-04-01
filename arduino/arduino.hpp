@@ -1,4 +1,5 @@
 #pragma once
+#include "board-generic.hpp"
 #include "avr.hpp"
 
 class Arduino

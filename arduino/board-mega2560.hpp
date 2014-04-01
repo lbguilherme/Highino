@@ -2,6 +2,7 @@
 #include "avr.hpp"
 #include <avr/sfr_defs.h>
 #include <avr/io.h>
+#define BOARD "mega2560"
 
 static constexpr unsigned long CLOCK = 16000000;
 
@@ -11,7 +12,7 @@ enum // Digital Pins
     SS   = 53,
     MOSI = 51,
     MISO = 50,
-    SCK  = 52,
+    SCLK = 52,
 
     // I2C/TWI
     SDA = 20,
@@ -36,14 +37,6 @@ enum // Analog Input Pins
     A0 = 54,
     A1, A2, A3, A4, A5, A6, A7, A8,
     A9, A10, A11, A12, A13, A14, A15
-};
-
-enum // Analog Output Pins
-{
-    PWM2 = 2,
-    PWM3, PWM4, PWM5, PWM6, PWM7, PWM8,
-    PWM9, PWM10, PWM11, PWM12, PWM13,
-    PWM44 = 44, PWM45, PWM46
 };
 
 enum AnalogReference
@@ -79,6 +72,11 @@ static constexpr uint8_t PinToPort[] = {
 static constexpr volatile uint8_t* PortToMode[] = {
     0, &DDRA, &DDRB, &DDRC, &DDRD, &DDRE, &DDRF,
     &DDRG, &DDRH, 0, &DDRJ, &DDRK, &DDRL
+};
+
+static constexpr volatile uint8_t* PortToInput[] = {
+    0, &PINA, &PINB, &PINC, &PIND, &PINE, &PINF,
+    &PING, &PINH, 0, &PINJ, &PINK, &PINL
 };
 
 static constexpr volatile uint8_t* PortToOutput[] = {
