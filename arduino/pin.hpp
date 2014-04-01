@@ -92,12 +92,12 @@ public:
 
     AnalogOutputPin() { detail::setupPwmTimer<timer, true>();}
 
-    void set(uint16_t value)
+    void set(uint8_t value)
     {
         if (&ocr8)
-            ocr8 = value >> 8;
+            ocr8 = value;
         else
-            ocr16 = value>>8;
+            ocr16 = value;
     }
 
     static constexpr uint8_t timer = detail::PinToTimer[P];
