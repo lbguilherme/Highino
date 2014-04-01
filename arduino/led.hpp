@@ -8,6 +8,8 @@ public:
 
     static constexpr uint8_t pin = P;
 
+    Led() {off();}
+
     void on()            {Pin<P>::high();}
     void off()           {Pin<P>::low();}
     void set(bool value) {Pin<P>::set(value);}
@@ -26,6 +28,8 @@ class AnalogLed : protected AnalogOutputPin<P>
 public:
 
     static constexpr uint8_t pin = P;
+
+    AnalogLed() {off();}
 
     void on(uint8_t brightness)  {AnalogOutputPin<P>::set(brightness);}
     void off()                   {on(0);}
