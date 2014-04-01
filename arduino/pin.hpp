@@ -31,10 +31,11 @@ public:
 
 protected:
 
-    void disablePwm() const {detail::setupPwmTimer<detail::PinToTimer[P], false>();}
+    void disablePwm() const {if (timer) detail::setupPwmTimer<timer, false>();}
 
     static constexpr uint8_t bit = detail::PinToBit[P];
     static constexpr uint8_t port = detail::PinToPort[P];
+    static constexpr uint8_t timer = detail::PinToTimer[P];
     static constexpr volatile uint8_t& modeByte = *detail::PortToMode[port];
     static constexpr volatile uint8_t& outputByte = *detail::PortToOutput[port];
 
