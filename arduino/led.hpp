@@ -41,4 +41,4 @@ public:
 };
 
 using BuiltinLed = Led<LED_BUILTIN>;
-using AnalogBuiltinLed = AnalogLed<LED_BUILTIN>;
+using BuiltinAnalogLed = AnalogLed<LED_BUILTIN>;
