@@ -106,6 +106,14 @@ public:
             ocr16 = value;
     }
 
+    uint8_t get()
+    {
+        if (&ocr8)
+            return ocr8;
+        else
+            return ocr16;
+    }
+
     static constexpr uint8_t timer = detail::PinToTimer[P];
     static constexpr volatile uint8_t& ocr8 = *detail::TimerToOcr8[timer];
     static constexpr volatile uint16_t& ocr16 = *detail::TimerToOcr16[timer];
