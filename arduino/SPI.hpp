@@ -23,7 +23,7 @@ public:
 
     Spi() :
         ss(Output), sclk(Output), mosi(Output), miso(Input),
-        mode(SpiMode0), bitOrder(SpiMsbFirst)
+        spiMode(SpiMode0), spiBitOrder(SpiMsbFirst)
     {
         // Falling edge to select device
         ss.high();
@@ -33,7 +33,7 @@ public:
     uint8_t transfer(uint8_t byte)
     {
         // TODO: handle mode
-        if (bitOrder == SpiMsbFirst)
+        if (spiBitOrder == SpiMsbFirst)
         {
             for (uint8_t mask = 0x80; mask; mask >>= 1)
             {
@@ -56,10 +56,10 @@ public:
         return byte;
     }
 
-    void setMode(SpiMode m) { mode = m; }
-    SpiMode mode() { return mode; }
-    void setBitOrder(SpiBitOrder b) { bitOrder = b; }
-    SpiBitOrder bitOrder() { return bitOrder; }
+    void setMode(SpiMode mode) { spiMode = mode; }
+    SpiMode mode() { return spiMode; }
+    void setBitOrder(SpiBitOrder bitOrder) { spiBitOrder = bitOrder; }
+    SpiBitOrder bitOrder() { return spiBitOrder; }
 
 private:
 
@@ -67,8 +67,8 @@ private:
     Pin<P_SCLK> sclk;
     Pin<P_MOSI> mosi;
     Pin<P_MISO> miso;
-    SpiMode mode;
-    SpiBitOrder bitOrder;
+    SpiMode spiMode;
+    SpiBitOrder spiBitOrder;
 
 };
 
@@ -98,7 +98,7 @@ public:
     }
 
     void setMode(SpiMode m) { SPCR = (SPCR & ~0x0C) | m; }
-    SpiMode mode() { return SPCR & 0x0C; }
+    SpiMode mode() { return SpiMode(SPCR & 0x0C); }
     void setBitOrder(SpiBitOrder b) { if (b == SpiLsbFirst) SPCR |= (1<<DORD); else SPCR &= ~(1<<DORD); }
     SpiBitOrder bitOrder() { return SPCR & (1<<DORD) ? SpiLsbFirst : SpiMsbFirst; }
 

@@ -35,11 +35,11 @@ public:
     void off()                   {on(0);}
     void set(uint8_t brightness) {on(brightness);}
     bool isOn() const            {return get() > 0;}
-    bool isOff() const           {!isOff();}
+    bool isOff() const           {return!isOff();}
     uint8_t get() const          {return AnalogOutputPin<P>::get();}
     uint8_t brightness() const   {return get();}
 
-    AnalogLed<P>& operator=(uint8_t brightness) { set(value); return *this; }
+    AnalogLed<P>& operator=(uint8_t brightness) { set(brightness); return *this; }
     bool operator*() { return get(); }
 
     AnalogLed<P>& operator+=(int delta) { set(get()+delta); return *this; }
