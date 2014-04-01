@@ -6,6 +6,8 @@ class Led : protected Pin<P>
 {
 public:
 
+    static constexpr uint8_t pin = P;
+
     Led() {Pin<P>::setMode(Output);}
 
     void on()          {Pin<P>::high();}

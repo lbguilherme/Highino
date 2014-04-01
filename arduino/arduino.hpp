@@ -14,5 +14,5 @@ static Arduino arduino;
 inline Arduino::Arduino()
 {
     enableInterruptions();
-    setupTimer0();
+    detail::enableTimerInterruption();
 }

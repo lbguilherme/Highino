@@ -3,3 +3,4 @@
 #include "time.hpp"
 #include "pin.hpp"
 #include "led.hpp"
+#include "SPI.hpp"

@@ -16,17 +16,17 @@ SIZE = avr-size
 OBJCOPY = avr-objcopy
 AVRDUDE = avrdude
 
-CXXFLAGS = -mmcu=$(MCU) -std=c++11 -Iarduino -include board-$(ARDUINO).hpp -Wall -Wextra -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CXXFLAGS = -mmcu=$(MCU) -std=c++11 -Iarduino -include board-$(ARDUINO).hpp -Wall -Wextra -Wno-unused-function -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 LDFLAGS = -mrelax
 PFLAGS = -F -p $(MCU) -P $(PORT) -c $(PROTOCOL) -b $(UPLOAD_RATE) -D
 
 build: main.S main.o main.elf main.hex
 	$(SIZE) main.elf
 
-%.S: %.cpp $(wildcard arduino/*.hpp)
+%.S: %.cpp $(wildcard arduino/*.hpp) arduino
 	$(CXX) -S $(CXXFLAGS) $< -o $@
 	
-%.o: %.cpp $(wildcard arduino/*.hpp)
+%.o: %.cpp $(wildcard arduino/*.hpp) arduino
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 	
 %.elf: %.o
