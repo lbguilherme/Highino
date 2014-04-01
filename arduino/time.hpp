@@ -12,15 +12,33 @@ ISR(TIMER0_OVF_vect)
     ++overflowCount;
 }
 
-static uint32_t now_nonstandard()
+class Time;
+class Time
 {
-    return overflowCount * 2 / (CLOCK / 8000000);
+public:
+
+    constexpr Time(uint32_t v) : value(v) {}
+    uint32_t value;
+
+    static Time now()
+    {
+        return overflowCount * 2 / (CLOCK / 8000000);
+    }
+
+};
+
+static constexpr Time operator"" _ms(unsigned long long v)
+{
+    return v*1024/1000;
 }
 
-static void delay_nonstandard(unsigned time)
+static constexpr Time operator"" _s(unsigned long long v)
 {
-    uint32_t end = now_nonstandard() + time;
-    while (now_nonstandard() < end);
+    return v*1024;
 }
 
-#define delay(ms) delay_nonstandard(ms*1024ULL/1000);
+static void delay(Time time)
+{
+    uint32_t end = Time::now().value + time.value;
+    while (Time::now().value < end);
+}
