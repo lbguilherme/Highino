@@ -14,5 +14,5 @@ static Arduino arduino;
 inline Arduino::Arduino()
 {
     enableInterruptions();
-    detail::enableTimerInterruption();
+    detail::init();
 }

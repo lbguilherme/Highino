@@ -97,7 +97,7 @@ public:
         if (&ocr8)
             ocr8 = value >> 8;
         else
-            ocr16 = value;
+            ocr16 = value>>8;
     }
 
     static constexpr uint8_t timer = detail::PinToTimer[P];

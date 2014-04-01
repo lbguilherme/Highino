@@ -107,12 +107,42 @@ static constexpr volatile uint8_t* TimerToOcr8[] = {
     0, &OCR0A, &OCR0B, 0, 0, 0, &OCR2A, &OCR2B, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
-static void enableTimerInterruption() {
+static void init() {
+    // Timer 0 (pins 4, 13)
     sbi(TCCR0A, WGM01);
     sbi(TCCR0A, WGM00);
     sbi(TCCR0B, CS01);
     sbi(TCCR0B, CS00);
+
+    // Timer 1 (pins 11, 12)
+    sbi(TCCR1A, WGM10);
+    sbi(TCCR1B, CS11);
+    sbi(TCCR1B, CS10);
+
+    // Timer 2 (pins 9, 10)
+    sbi(TCCR2B, CS22);
+    sbi(TCCR2A, WGM20);
+
+    // Timer 3 (pins 2, 3, 5)
+    sbi(TCCR3B, CS31);
+    sbi(TCCR3B, CS30);
+    sbi(TCCR3A, WGM30);
+
+    // Timer 4 (pins 6, 7, 8)
+    sbi(TCCR4B, CS41);
+    sbi(TCCR4B, CS40);
+    sbi(TCCR4A, WGM40);
+
+    // Timer 5 (pins 44, 45, 46)
+    sbi(TCCR5B, CS51);
+    sbi(TCCR5B, CS50);
+    sbi(TCCR5A, WGM50);
+
+    // Interrupt on Timer 0 Overflow
     sbi(TIMSK0, TOIE0);
+
+    // Disconnect pins 0,1 from USB
+    UCSR0B = 0;
 }
 
 template <unsigned T, bool Enabled>
@@ -138,8 +168,8 @@ template <> void setupPwmTimer<9,  true>()  { sbi(TCCR3A, COM3B1); }
 template <> void setupPwmTimer<9,  false>() { cbi(TCCR3A, COM3B1); }
 template <> void setupPwmTimer<10, true>()  { sbi(TCCR3A, COM3C1); }
 template <> void setupPwmTimer<10, false>() { cbi(TCCR3A, COM3C1); }
-//template <> void setupPwmTimer<11, true>()  { sbi(TCCR4A, COM4A1); }
-//template <> void setupPwmTimer<11, false>() { cbi(TCCR4A, COM4A1); }
+template <> void setupPwmTimer<11, true>()  { sbi(TCCR4A, COM4A1); }
+template <> void setupPwmTimer<11, false>() { cbi(TCCR4A, COM4A1); }
 template <> void setupPwmTimer<12, true>()  { sbi(TCCR4A, COM4B1); }
 template <> void setupPwmTimer<12, false>() { cbi(TCCR4A, COM4B1); }
 template <> void setupPwmTimer<13, true>()  { sbi(TCCR4A, COM4C1); }
