@@ -34,9 +34,12 @@ public:
 
     uint8_t transfer(uint8_t byte)
     {
+        ss.low();
         SPDR = byte;
         while (!(SPSR & (1<<SPIF)));
-        return SPDR;
+        uint8_t r = SPDR;
+        ss.high();
+        return r;
     }
 
     void setMode(SpiMode m) { SPCR = (SPCR & ~0x0C) | m; }
