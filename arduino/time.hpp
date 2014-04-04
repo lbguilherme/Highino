@@ -17,28 +17,39 @@ class Time
 {
 public:
 
-    constexpr Time(uint32_t v) : value(v) {}
+    explicit constexpr Time(uint32_t v=0) : value(v) {}
+
     uint32_t value;
 
     static Time now()
     {
-        return overflowCount * 2 / (CLOCK / 8000000);
+        return Time(overflowCount);
     }
 
 };
 
 static constexpr Time operator"" _ms(unsigned long long v)
 {
-    return v*1024/1000;
+    return Time(v*1024/1000 * 2 / (CLOCK / 8000000));
 }
 
 static constexpr Time operator"" _s(unsigned long long v)
 {
-    return v*1024;
+    return Time(v*1024 * 2 / (CLOCK / 8000000));
+}
+
+static constexpr Time operator"" _m(unsigned long long v)
+{
+    return Time(v*1024*60 * 2 / (CLOCK / 8000000));
+}
+
+static constexpr Time operator"" _h(unsigned long long v)
+{
+    return Time(v*1024*3600 * 2 / (CLOCK / 8000000));
 }
 
 static void delay(Time time)
 {
-    uint32_t end = Time::now().value + time.value;
-    while (Time::now().value < end);
+    uint32_t end = overflowCount + time.value;
+    while (overflowCount < end);
 }

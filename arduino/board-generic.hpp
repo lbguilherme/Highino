@@ -4,6 +4,10 @@
 // This file is for highlighting and code completion only.
 // Ignore any values and definitions present here.
 
+#include "avr.hpp"
+#include <avr/sfr_defs.h>
+#include <avr/io.h>
+
 static constexpr unsigned long CLOCK;
 
 enum // Digital Pins
@@ -50,9 +54,12 @@ enum AnalogReference
 
 namespace detail {
 
-constexpr bool isValidDigitalPin(uint8_t pin) { return pin < 70; }
-constexpr bool isValidAnalogInputPin(uint8_t pin) { return pin >= 54 && pin < 70; }
-constexpr bool isValidAnalogOutputPin(uint8_t pin) { return (pin >= 2 && pin <= 13) || (pin >= 44 && pin <= 46); }
+#define detail__serialChannelCount 999
+#define detail__serialBufferOptimalSize 1024
+constexpr unsigned serialChannelCount() { return 999; }
+constexpr bool isValidDigitalPin(uint8_t) { return true; }
+constexpr bool isValidAnalogInputPin(uint8_t) { return true; }
+constexpr bool isValidAnalogOutputPin(uint8_t) { return true; }
 
 static constexpr uint8_t PinToBit[] = {};
 static constexpr uint8_t PinToPort[] = {};
@@ -63,6 +70,9 @@ static constexpr uint8_t PinToTimer[] = {};
 static constexpr uint8_t PinToChannel[] = {};
 static constexpr volatile uint16_t* TimerToOcr16[] = {};
 static constexpr volatile uint8_t* TimerToOcr8[] = {};
+
+static constexpr volatile uint8_t* serialObjects[][6] = {};
+static constexpr uint8_t serialConstants[][6] = {};
 
 static void init() {}
 

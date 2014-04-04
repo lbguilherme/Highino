@@ -1,5 +1,3 @@
-arduino/arduino
-arduino/arduino.hpp
 arduino/board-mega2560.hpp
 arduino/led.hpp
 arduino/pin.hpp
@@ -9,3 +7,17 @@ main.cpp
 Makefile
 arduino/spi.hpp
 arduino/board-generic.hpp
+examples/BareMinimum.cpp
+examples/Blink.cpp
+examples/Fade.cpp
+arduino/queue.hpp
+arduino/serial.hpp
+arduino/stream.hpp
+arduino/math.hpp
+examples/DigitalReadSerial.cpp
+arduino/include/Pin
+arduino/include/Led
+arduino/include/Time
+arduino/include/Serial
+examples/AnalogReadSerial.cpp
+arduino/string.hpp

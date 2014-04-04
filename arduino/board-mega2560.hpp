@@ -49,6 +49,9 @@ enum AnalogReference
 
 namespace detail {
 
+#define detail__serialChannelCount 4
+#define detail__serialBufferOptimalSize 64
+constexpr unsigned serialChannelCount() { return 4; }
 constexpr bool isValidDigitalPin(uint8_t pin) { return pin < 70; }
 constexpr bool isValidAnalogInputPin(uint8_t pin) { return pin >= 54 && pin < 70; }
 constexpr bool isValidAnalogOutputPin(uint8_t pin) { return (pin >= 2 && pin <= 13) || (pin >= 44 && pin <= 46); }
@@ -93,7 +96,7 @@ static constexpr uint8_t PinToTimer[] = {
 static constexpr uint8_t PinToChannel[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+    0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
 };
 
 static constexpr volatile uint16_t* TimerToOcr16[] = {
@@ -105,7 +108,34 @@ static constexpr volatile uint8_t* TimerToOcr8[] = {
     0, &OCR0A, &OCR0B, 0, 0, 0, &OCR2A, &OCR2B, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
+static constexpr volatile uint8_t* serialObjects[][6] = {
+    {&UBRR0H, &UBRR0L, &UCSR0A, &UCSR0B, &UCSR0C, &UDR0},
+    {&UBRR1H, &UBRR1L, &UCSR1A, &UCSR1B, &UCSR1C, &UDR1},
+    {&UBRR2H, &UBRR2L, &UCSR2A, &UCSR2B, &UCSR2C, &UDR2},
+    {&UBRR3H, &UBRR3L, &UCSR3A, &UCSR3B, &UCSR3C, &UDR3}
+};
+
+static constexpr uint8_t serialConstants[][6] = {
+    {RXEN0, TXEN0, RXCIE0, UDRIE0, U2X0, UPE0},
+    {RXEN1, TXEN1, RXCIE1, UDRIE1, U2X1, UPE1},
+    {RXEN2, TXEN2, RXCIE2, UDRIE2, U2X2, UPE2},
+    {RXEN3, TXEN3, RXCIE3, UDRIE3, U2X3, UPE3},
+};
+
+#define detail_serial_UDRE_intr0 USART0_UDRE_vect
+#define detail_serial_UDRE_intr1 USART1_UDRE_vect
+#define detail_serial_UDRE_intr2 USART2_UDRE_vect
+#define detail_serial_UDRE_intr3 USART3_UDRE_vect
+#define detail_serial_USART_intr0 USART0_RX_vect
+#define detail_serial_USART_intr1 USART1_RX_vect
+#define detail_serial_USART_intr2 USART2_RX_vect
+#define detail_serial_USART_intr3 USART3_RX_vect
+
+static void init() __attribute__((constructor, used));
 static void init() {
+    // Allow interruptions to happen
+    enableInterruptions();
+
     // Timer 0 (pins 4, 13)
     sbi(TCCR0A, WGM01);
     sbi(TCCR0A, WGM00);

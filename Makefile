@@ -9,19 +9,23 @@ UPLOAD_RATE = 115200
 
 # This depends on with usb port the arduino is connected.
 # Detect (how?) or move out of here
-PORT = /dev/ttyACM0
+PORT = /dev/ttyACM1
 
 CXX = avr-g++
 SIZE = avr-size
 OBJCOPY = avr-objcopy
 AVRDUDE = avrdude
 
-CXXFLAGS = -mmcu=$(MCU) -std=c++11 -Iarduino -include board-$(ARDUINO).hpp -Wall -Wextra -Wno-unused-function -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CXXFLAGS = -mmcu=$(MCU) -std=c++11 -Iarduino/include -include arduino/board-$(ARDUINO).hpp -Wall -Wextra -Wno-unused-function -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 LDFLAGS = -mrelax
 PFLAGS = -F -p $(MCU) -P $(PORT) -c $(PROTOCOL) -b $(UPLOAD_RATE) -D
 
-build: main.S main.o main.elf main.hex
-	$(SIZE) main.elf
+EXAMPLES = $(wildcard examples/*.cpp)
+EXAMPLES_ELF = $(EXAMPLES:.cpp=.elf)
+EXAMPLES_HEX = $(EXAMPLES:.cpp=.hex)
+
+build: main.S main.o main.elf main.hex $(EXAMPLES_ELF) $(EXAMPLES_HEX)
+	$(SIZE) main.elf $(EXAMPLES_ELF)
 
 %.S: %.cpp $(wildcard arduino/*.hpp) arduino
 	$(CXX) -S $(CXXFLAGS) $< -o $@

@@ -15,66 +15,8 @@ enum SpiBitOrder
     SpiMsbFirst
 };
 
-// Software SPI
-template<unsigned P_SS=SS, unsigned P_SCLK=SCLK, unsigned P_MOSI=MOSI, unsigned P_MISO=MISO>
+template <unsigned P_SS>
 class Spi
-{
-public:
-
-    Spi() :
-        ss(Output), sclk(Output), mosi(Output), miso(Input),
-        spiMode(SpiMode0), spiBitOrder(SpiMsbFirst)
-    {
-        // Falling edge to select device
-        ss.high();
-        ss.low();
-    }
-
-    uint8_t transfer(uint8_t byte)
-    {
-        // TODO: handle mode
-        if (spiBitOrder == SpiMsbFirst)
-        {
-            for (uint8_t mask = 0x80; mask; mask >>= 1)
-            {
-                mosi.set(byte & mask);
-                sclk.high();
-                byte = (byte & ~mask) | (miso.get() ? mask : 0);
-                sclk.low();
-            }
-        }
-        else
-        {
-            for (uint8_t mask = 0x01; mask; mask <<= 1)
-            {
-                mosi.set(byte & mask);
-                sclk.high();
-                byte = (byte & ~mask) | (miso.get() ? mask : 0);
-                sclk.low();
-            }
-        }
-        return byte;
-    }
-
-    void setMode(SpiMode mode) { spiMode = mode; }
-    SpiMode mode() { return spiMode; }
-    void setBitOrder(SpiBitOrder bitOrder) { spiBitOrder = bitOrder; }
-    SpiBitOrder bitOrder() { return spiBitOrder; }
-
-private:
-
-    Pin<P_SS> ss;
-    Pin<P_SCLK> sclk;
-    Pin<P_MOSI> mosi;
-    Pin<P_MISO> miso;
-    SpiMode spiMode;
-    SpiBitOrder spiBitOrder;
-
-};
-
-// Hardware SPI
-template <>
-class Spi<SS, SCLK, MOSI, MISO>
 {
 public:
 
@@ -104,10 +46,9 @@ public:
 
 private:
 
-    Pin<SS> ss;
+    Pin<P_SS> ss;
     Pin<SCLK> sclk;
     Pin<MOSI> mosi;
     Pin<MISO> miso;
 
 };
-

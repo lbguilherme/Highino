@@ -7,4 +7,4 @@ static void cbi(volatile uint8_t& sfr, uint8_t bit) {sfr &= ~_BV(bit);}
 static void sbi(volatile uint8_t& sfr, uint8_t bit) {sfr |= _BV(bit);}
 
 static void enableInterruptions() {sei();}
-//static void disableInterruptions() {cli();}
+static void disableInterruptions() {cli();}

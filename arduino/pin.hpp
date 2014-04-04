@@ -56,7 +56,8 @@ inline void Pin<P>::setMode(PinMode mode)
     case InputPullup: modeByte &= ~bit; high(); break;
     }
 }
-
+template <unsigned i>
+class a;
 template <unsigned P>
 class AnalogInputPin
 {
@@ -66,9 +67,15 @@ public:
 
     static constexpr uint8_t pin = P;
 
-    uint16_t get()
+    uint16_t get() const
     {
+        if (channel <= 7)
+            cbi(ADCSRB, MUX5);
+        else
+            sbi(ADCSRB, MUX5);
+
         ADMUX = (ref << 6) | (channel & 0x07);
+        sbi(ADCSRA, ADEN);
         sbi(ADCSRA, ADSC);
         while (bit_is_set(ADCSRA, ADSC));
         uint8_t lo = ADCL;
@@ -78,6 +85,8 @@ public:
 
     AnalogReference reference() { return ref; }
     void setReference(AnalogReference value) { ref = value; }
+
+    uint16_t operator*() { return get(); }
 
 protected:
 
@@ -106,13 +115,16 @@ public:
             ocr16 = value;
     }
 
-    uint8_t get()
+    uint8_t get() const
     {
         if (&ocr8)
             return ocr8;
         else
             return ocr16;
     }
+
+    AnalogOutputPin<P>& operator=(uint8_t value) { set(value); return *this; }
+    uint8_t operator*() { return get(); }
 
     static constexpr uint8_t timer = detail::PinToTimer[P];
     static constexpr volatile uint8_t& ocr8 = *detail::TimerToOcr8[timer];
