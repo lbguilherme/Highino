@@ -27,7 +27,7 @@ public:
     OutStream& operator<<(const char* s)
     {
         while (char c = *(s++))
-            *this << c;
+            putc(c);
         return *this;
     }
 
@@ -38,53 +38,77 @@ public:
 
     OutStream& operator<<(uint8_t n)
     {
-        while (n) { *this << '0' + n % 10; n /= 10; }
+        if (n == 0) { putc('0'); return *this; }
+        uint8_t e = 100;
+        while (!(n/e)) e /= 10;
+        while (n) { putc('0' + n / e); n %= e; e /= 10; }
         return *this;
     }
 
     OutStream& operator<<(uint16_t n)
     {
-        while (n) { *this << '0' + n % 10; n /= 10; }
+        if (n == 0) { putc('0'); return *this; }
+        uint16_t e = 10000;
+        while (!(n/e)) e /= 10;
+        while (n) { putc('0' + n / e); n %= e; e /= 10; }
         return *this;
     }
 
     OutStream& operator<<(uint32_t n)
     {
-        while (n) { *this << '0' + n % 10; n /= 10; }
+        if (n == 0) { putc('0'); return *this; }
+        uint32_t e = 1000000000UL;
+        while (!(n/e)) e /= 10;
+        while (n) { putc('0' + n / e); n %= e; e /= 10; }
         return *this;
     }
 
     OutStream& operator<<(uint64_t n)
     {
-        while (n) { *this << '0' + n % 10; n /= 10; }
+        if (n == 0) { putc('0'); return *this; }
+        uint64_t e = 10000000000000000000ULL;
+        while (!(n/e)) e /= 10;
+        while (n) { putc('0' + n / e); n %= e; e /= 10; }
         return *this;
     }
 
     OutStream& operator<<(int8_t n)
     {
-        if (n < 0) *this << '-';
-        while (n) { *this << '0' + abs(n % 10); n /= 10; }
+        if (n == 0) { putc('0'); return *this; }
+        if (n < 0) putc('-');
+        int8_t e = 100;
+        while (!(n/e)) e /= 10;
+        while (n) { putc('0' + abs(n / e)); n %= e; e /= 10; }
         return *this;
     }
 
     OutStream& operator<<(int16_t n)
     {
-        if (n < 0) *this << '-';
-        while (n) { *this << '0' + abs(n % 10); n /= 10; }
+        if (n == 0) { putc('0'); return *this; }
+        if (n < 0) putc('-');
+        int16_t e = 10000;
+        while (!(n/e)) e /= 10;
+        while (n) { putc('0' + abs(n / e)); n %= e; e /= 10; }
         return *this;
     }
 
     OutStream& operator<<(int32_t n)
     {
-        if (n < 0) *this << '-';
-        while (n) { *this << '0' + abs(n % 10); n /= 10; }
+        if (n == 0) { putc('0'); return *this; }
+        if (n < 0) putc('-');
+        int32_t e = 1000000000L;
+        while (!(n/e)) e /= 10;
+        while (n) { putc('0' + abs(n / e)); n %= e; e /= 10; }
         return *this;
     }
 
     OutStream& operator<<(int64_t n)
     {
-        if (n < 0) *this << '-';
-        while (n) { *this << '0' + abs(n % 10); n /= 10; }
+        if (n == 0) { putc('0'); return *this; }
+        if (n < 0) putc('-');
+        int64_t e = 1000000000000000000LL;
+        while (!(n/e)) e /= 10;
+        while (n) { putc('0' + abs(n / e)); n %= e; e /= 10; }
         return *this;
     }
 

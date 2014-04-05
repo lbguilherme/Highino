@@ -9,7 +9,7 @@ UPLOAD_RATE = 115200
 
 # This depends on with usb port the arduino is connected.
 # Detect (how?) or move out of here
-PORT = /dev/ttyACM1
+PORT = /dev/ttyACM0
 
 CXX = avr-g++
 SIZE = avr-size
