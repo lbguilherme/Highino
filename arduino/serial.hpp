@@ -65,6 +65,12 @@ public:
         cbi(UCSRB, UDRIE);
     }
 
+    void finish()
+    {
+        // End of Transmission
+        putc(4);
+    }
+
     void putc(char c)
     {
         while (queueOut.isFull());
