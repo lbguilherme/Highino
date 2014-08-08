@@ -40,7 +40,7 @@ public:
     void off()                   {on(0);}
     void set(uint8_t brightness) {on(brightness);}
     bool isOn() const            {return get() > 0;}
-    bool isOff() const           {return !isOff();}
+    bool isOff() const           {return !isOn();}
     uint8_t get() const          {return AnalogOutputPin<P>::get();}
     uint8_t brightness() const   {return get();}
 
