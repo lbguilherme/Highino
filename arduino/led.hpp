@@ -1,6 +1,11 @@
 #pragma once
 #include "pin.hpp"
 
+// Ensure all timers will be initialized on the board
+namespace detail {
+static void initTimers() __attribute__((constructor, used));
+}
+
 template <unsigned P>
 class Led : protected Pin<P>
 {

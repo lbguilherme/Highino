@@ -3,6 +3,11 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+// Ensure all timers will be initialized on the board
+namespace detail {
+static void initTimers() __attribute__((constructor, used));
+}
+
 static volatile uint32_t overflowCount = 0;
 
 // Timer0 ticks every 64 cycles

@@ -131,11 +131,17 @@ static constexpr uint8_t serialConstants[][6] = {
 #define detail_serial_USART_intr2 USART2_RX_vect
 #define detail_serial_USART_intr3 USART3_RX_vect
 
-static void init() __attribute__((constructor, used));
-static void init() {
+static void initAVR() __attribute__((constructor, used));
+static void initAVR() {
     // Allow interruptions to happen
     enableInterruptions();
 
+    // Disconnect pins 0,1 from USB
+    UCSR0B = 0;
+}
+
+static void initTimers()
+{
     // Timer 0 (pins 4, 13)
     sbi(TCCR0A, WGM01);
     sbi(TCCR0A, WGM00);
@@ -168,9 +174,6 @@ static void init() {
 
     // Interrupt on Timer 0 Overflow
     sbi(TIMSK0, TOIE0);
-
-    // Disconnect pins 0,1 from USB
-    UCSR0B = 0;
 }
 
 template <unsigned T, bool Enabled>
