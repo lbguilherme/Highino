@@ -11,6 +11,8 @@ UPLOAD_RATE = 115200
 # Detect (how?) or move out of here
 PORT = /dev/ttyACM0
 
+SERIAL_RATE = 9600
+
 CXX = avr-g++
 SIZE = avr-size
 OBJCOPY = avr-objcopy
@@ -48,6 +50,10 @@ build: main.S main.o main.elf main.hex $(EXAMPLES_HEX) $(EXAMPLES_S)
 
 upload: main.hex
 	@$(AVRDUDE) $(PFLAGS) -U flash:w:$<
+
+run: upload
+	@stty -F $(PORT) cs8 $(SERIAL_RATE) ignbrk -brkint -icrnl -imaxbel -opost -onlcr -isig icanon -iexten -echo -echoe -echok -echoctl -echoke noflsh -ixon -crtscts eof \^d
+	@cat $(PORT)
 
 clean:
 	@echo Cleaning...
