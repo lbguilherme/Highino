@@ -22,27 +22,36 @@ PFLAGS = -F -p $(MCU) -P $(PORT) -c $(PROTOCOL) -b $(UPLOAD_RATE) -D
 
 EXAMPLES = $(wildcard examples/*.cpp)
 EXAMPLES_ELF = $(EXAMPLES:.cpp=.elf)
+EXAMPLES_S = $(EXAMPLES:.cpp=.S)
 EXAMPLES_HEX = $(EXAMPLES:.cpp=.hex)
 
-build: main.S main.o main.elf main.hex $(EXAMPLES_ELF) $(EXAMPLES_HEX)
-	$(SIZE) main.elf $(EXAMPLES_ELF)
+.PRECIOUS: %.o %.elf
+
+build: main.S main.o main.elf main.hex $(EXAMPLES_HEX) $(EXAMPLES_S)
+	@$(SIZE) main.elf $(EXAMPLES_ELF)
 
 %.S: %.cpp $(wildcard arduino/*.hpp) arduino
-	$(CXX) -S $(CXXFLAGS) $< -o $@
+	@echo $<" => "$@
+	@$(CXX) -S $(CXXFLAGS) $< -o $@
 	
 %.o: %.cpp $(wildcard arduino/*.hpp) arduino
-	$(CXX) -c $(CXXFLAGS) $< -o $@
+	@echo $<" => "$@
+	@$(CXX) -c $(CXXFLAGS) $< -o $@
 	
 %.elf: %.o
-	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
+	@echo $<" => "$@
+	@$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
 %.hex: %.elf
-	$(OBJCOPY) -O $(FORMAT) -R .eeprom $< $@
+	@echo $<" => "$@
+	@$(OBJCOPY) -O $(FORMAT) -R .eeprom $< $@
 
 upload: main.hex
-	$(AVRDUDE) $(PFLAGS) -U flash:w:$<
+	@$(AVRDUDE) $(PFLAGS) -U flash:w:$<
 
 clean:
-	 rm -f *.elf *.hex *.o *.S *~
+	@echo Cleaning...
+	@rm -f *.elf *.hex *.o *.S *~
+	@rm -f **/*.elf **/*.hex **/*.o **/*.S **/*~
 
 .PHONY: build upload clean
