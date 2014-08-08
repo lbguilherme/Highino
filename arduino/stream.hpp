@@ -41,7 +41,7 @@ public:
         if (n == 0) { putc('0'); return *this; }
         uint8_t e = 100;
         while (!(n/e)) e /= 10;
-        while (n) { putc('0' + n / e); n %= e; e /= 10; }
+        while (e) { putc('0' + n / e); n %= e; e /= 10; }
         return *this;
     }
 
@@ -50,7 +50,7 @@ public:
         if (n == 0) { putc('0'); return *this; }
         uint16_t e = 10000;
         while (!(n/e)) e /= 10;
-        while (n) { putc('0' + n / e); n %= e; e /= 10; }
+        while (e) { putc('0' + n / e); n %= e; e /= 10; }
         return *this;
     }
 
@@ -59,7 +59,7 @@ public:
         if (n == 0) { putc('0'); return *this; }
         uint32_t e = 1000000000UL;
         while (!(n/e)) e /= 10;
-        while (n) { putc('0' + n / e); n %= e; e /= 10; }
+        while (e) { putc('0' + n / e); n %= e; e /= 10; }
         return *this;
     }
 
@@ -68,7 +68,7 @@ public:
         if (n == 0) { putc('0'); return *this; }
         uint64_t e = 10000000000000000000ULL;
         while (!(n/e)) e /= 10;
-        while (n) { putc('0' + n / e); n %= e; e /= 10; }
+        while (e) { putc('0' + n / e); n %= e; e /= 10; }
         return *this;
     }
 
@@ -78,7 +78,7 @@ public:
         if (n < 0) putc('-');
         int8_t e = 100;
         while (!(n/e)) e /= 10;
-        while (n) { putc('0' + abs(n / e)); n %= e; e /= 10; }
+        while (e) { putc('0' + abs(n / e)); n %= e; e /= 10; }
         return *this;
     }
 
@@ -88,7 +88,7 @@ public:
         if (n < 0) putc('-');
         int16_t e = 10000;
         while (!(n/e)) e /= 10;
-        while (n) { putc('0' + abs(n / e)); n %= e; e /= 10; }
+        while (e) { putc('0' + abs(n / e)); n %= e; e /= 10; }
         return *this;
     }
 
@@ -98,7 +98,7 @@ public:
         if (n < 0) putc('-');
         int32_t e = 1000000000L;
         while (!(n/e)) e /= 10;
-        while (n) { putc('0' + abs(n / e)); n %= e; e /= 10; }
+        while (e) { putc('0' + abs(n / e)); n %= e; e /= 10; }
         return *this;
     }
 
@@ -108,7 +108,7 @@ public:
         if (n < 0) putc('-');
         int64_t e = 1000000000000000000LL;
         while (!(n/e)) e /= 10;
-        while (n) { putc('0' + abs(n / e)); n %= e; e /= 10; }
+        while (e) { putc('0' + abs(n / e)); n %= e; e /= 10; }
         return *this;
     }
 
